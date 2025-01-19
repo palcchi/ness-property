@@ -332,89 +332,6 @@ pre.w-code-block code {
     display: contents;
 }
 
-.w-webflow-badge,
-.w-webflow-badge>img {
-    box-sizing: unset;
-    width: unset;
-    height: unset;
-    max-height: unset;
-    max-width: unset;
-    min-height: unset;
-    min-width: unset;
-    margin: unset;
-    padding: unset;
-    float: unset;
-    clear: unset;
-    border: unset;
-    border-radius: unset;
-    background: unset;
-    background-image: unset;
-    background-position: unset;
-    background-size: unset;
-    background-repeat: unset;
-    background-origin: unset;
-    background-clip: unset;
-    background-attachment: unset;
-    background-color: unset;
-    box-shadow: unset;
-    transform: unset;
-    direction: unset;
-    font-family: unset;
-    font-weight: unset;
-    color: unset;
-    font-size: unset;
-    line-height: unset;
-    font-style: unset;
-    font-variant: unset;
-    text-align: unset;
-    letter-spacing: unset;
-    -webkit-text-decoration: unset;
-    text-decoration: unset;
-    text-indent: unset;
-    text-transform: unset;
-    list-style-type: unset;
-    text-shadow: unset;
-    vertical-align: unset;
-    cursor: unset;
-    white-space: unset;
-    word-break: unset;
-    word-spacing: unset;
-    word-wrap: unset;
-    transition: unset;
-}
-
-.w-webflow-badge {
-    white-space: nowrap;
-    cursor: pointer;
-    box-shadow: 0 0 0 1px #0000001a, 0 1px 3px #0000001a;
-    visibility: visible !important;
-    opacity: 1 !important;
-    z-index: 2147483647 !important;
-    color: #aaadb0 !important;
-    overflow: unset !important;
-    background-color: #fff !important;
-    border-radius: 3px !important;
-    width: auto !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 6px !important;
-    font-size: 12px !important;
-    line-height: 14px !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    position: fixed !important;
-    inset: auto 12px 12px auto !important;
-    transform: none !important;
-}
-
-.w-webflow-badge>img {
-    position: unset;
-    visibility: unset !important;
-    opacity: 1 !important;
-    vertical-align: middle !important;
-    display: inline-block !important;
-}
-
 h1,
 h2,
 h3,
@@ -4263,10 +4180,6 @@ figcaption {
 
 .text-color-pink {
     color: #9e165f;
-}
-
-.webflow-partner-badge {
-    border-radius: .25rem;
 }
 
 .circle-container {
