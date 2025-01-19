@@ -11452,12 +11452,12 @@
             };
         function D() {
           (f = e("html").attr("data-wf-site")),
-            (_ = "https://webflow.com/api/v1/form/" + f),
+            (_ = "" + f),
             u &&
-              _.indexOf("https://webflow.com") >= 0 &&
+              _.indexOf("") >= 0 &&
               (_ = _.replace(
-                "https://webflow.com",
-                "https://formdata.webflow.com"
+                "",
+                ""
               )),
             (S = `${_}/signFile`),
             (i = e(s + " form")),
