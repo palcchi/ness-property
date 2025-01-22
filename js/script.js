@@ -18389,6 +18389,23 @@ __p+='`),
     },
   });
 })();
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleButton = document.querySelector('.w-nav-button');
+  const menu = document.querySelector('.w-nav-menu');
+
+  // Toggle menu ketika tombol ditekan
+  toggleButton.addEventListener('click', () => {
+    menu.classList.toggle('active'); // Tambahkan class 'active'
+  });
+
+  // Tutup menu ketika salah satu link ditekan
+  const links = menu.querySelectorAll('.w-nav-link');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('active'); // Hilangkan class 'active'
+    });
+  });
+});
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript
