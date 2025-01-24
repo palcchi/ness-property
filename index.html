@@ -868,6 +868,16 @@
         });
       }
     </script>
-    <script></script>
+    <script>
+     document.addEventListener('DOMContentLoaded', function () {
+         document.querySelectorAll('.navbar-item').forEach(item => {
+             item.addEventListener('click', function (event) {
+                 event.preventDefault();
+                  event.stopPropagation();
+                  document.querySelector('.navbar-menu').classList.remove('open');
+              });
+         });
+      });
+    </script>
   </body>
 </html>

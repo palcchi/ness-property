@@ -18389,6 +18389,16 @@ __p+='`),
     },
   });
 })();
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.navbar-item').forEach(item => {
+      item.addEventListener('click', function (event) {
+          event.stopPropagation();
+          event.preventDefault();
+          const menu = document.querySelector('.navbar-menu');
+          menu.classList.remove('open');
+      });
+  });
+});
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript
