@@ -18400,7 +18400,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 async function cekJangkauan() {
-  let inputArea = document.getElementById("areaInput").value.trim();
+  let inputArea = document.getElementById("areaInput").value.trim().toLowerCase();
   let resultElement = document.getElementById("result");
 
   if (inputArea === "") {
@@ -18409,17 +18409,32 @@ async function cekJangkauan() {
       return;
   }
 
+  // Daftar kota/kabupaten yang selalu tersedia
+  let kotaTersedia = [
+      "bekasi", "jakarta", "bogor", "depok", "tangerang", "bali", 
+      "badung", "denpasar", "gianyar", "tabanan", "bangli", "klungkung",
+      "karangasem", "jembrana", "buleleng"
+  ];
+
+  // Jika kota ada di daftar prioritas, langsung tampilkan "tersedia"
+  if (kotaTersedia.includes(inputArea)) {
+      resultElement.innerHTML = `✅ Layanan tersedia di ${inputArea.charAt(0).toUpperCase() + inputArea.slice(1)}.`;
+      resultElement.style.color = "green";
+      return;
+  }
+
   try {
-      let response = await fetch("https://ibukota.id/api/kota");
+      // Ambil daftar semua kota/kabupaten dari API
+      let response = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/regencies.json");
       let data = await response.json();
       
-      let daftarKota = data.map(item => item.nama.toLowerCase());
-      
-      if (daftarKota.includes(inputArea.toLowerCase())) {
-          resultElement.innerHTML = `✅ Layanan tersedia di ${inputArea}.`;
+      let daftarKota = data.map(item => item.name.toLowerCase());
+
+      if (daftarKota.includes(inputArea)) {
+          resultElement.innerHTML = `✅ Layanan tersedia di ${inputArea.charAt(0).toUpperCase() + inputArea.slice(1)}.`;
           resultElement.style.color = "green";
       } else {
-          resultElement.innerHTML = `❌ Maaf, layanan belum tersedia di ${inputArea}.`;
+          resultElement.innerHTML = `❌ Maaf, layanan belum tersedia di ${inputArea.charAt(0).toUpperCase() + inputArea.slice(1)}.`;
           resultElement.style.color = "red";
       }
   } catch (error) {
