@@ -18399,6 +18399,35 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
+async function cekJangkauan() {
+  let inputArea = document.getElementById("areaInput").value.trim();
+  let resultElement = document.getElementById("result");
+
+  if (inputArea === "") {
+      resultElement.innerHTML = "Silakan masukkan nama kota/kabupaten!";
+      resultElement.style.color = "red";
+      return;
+  }
+
+  try {
+      let response = await fetch("https://ibukota.id/api/kota");
+      let data = await response.json();
+      
+      let daftarKota = data.map(item => item.nama.toLowerCase());
+      
+      if (daftarKota.includes(inputArea.toLowerCase())) {
+          resultElement.innerHTML = `✅ Layanan tersedia di ${inputArea}.`;
+          resultElement.style.color = "green";
+      } else {
+          resultElement.innerHTML = `❌ Maaf, layanan belum tersedia di ${inputArea}.`;
+          resultElement.style.color = "red";
+      }
+  } catch (error) {
+      resultElement.innerHTML = "⚠️ Gagal mengambil data. Coba lagi nanti!";
+      resultElement.style.color = "orange";
+      console.error("Error fetching data:", error);
+  }
+}
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript
