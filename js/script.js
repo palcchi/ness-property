@@ -18400,12 +18400,32 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 let daftarKota = [];
+let daftarProvinsi = [];
 
-// Ambil daftar kota/kabupaten dari API saat halaman dimuat
-async function loadKota() {
+// Fungsi untuk memuat daftar provinsi
+async function loadProvinsi() {
     try {
-        let response = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/regencies.json");
-        daftarKota = await response.json();
+        let response = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json");
+        daftarProvinsi = await response.json();
+        loadSemuaKota(); // Setelah provinsi dimuat, ambil daftar kota
+    } catch (error) {
+        console.error("Gagal memuat daftar provinsi:", error);
+    }
+}
+
+// Fungsi untuk mengambil daftar semua kota di Indonesia
+async function loadSemuaKota() {
+    try {
+        let semuaKota = [];
+        
+        for (let provinsi of daftarProvinsi) {
+            let response = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinsi.id}.json`);
+            let kotaDariProvinsi = await response.json();
+            semuaKota = semuaKota.concat(kotaDariProvinsi);
+        }
+
+        daftarKota = semuaKota;
+        console.log("Daftar kota berhasil dimuat:", daftarKota);
     } catch (error) {
         console.error("Gagal memuat daftar kota:", error);
     }
@@ -18423,7 +18443,7 @@ function cariKota() {
 
     filteredKota.forEach(item => {
         let div = document.createElement("div");
-        div.innerHTML = `<strong>${item.name}</strong>, ${item.province_id}`;
+        div.innerHTML = `<strong>${item.name}</strong>`;
         div.onclick = function () {
             document.getElementById("areaInput").value = item.name;
             autocompleteList.innerHTML = "";
@@ -18464,8 +18484,8 @@ function capitalizeEachWord(str) {
     return str.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 }
 
-// Load daftar kota saat halaman dimuat
-window.onload = loadKota;
+// Load daftar provinsi saat halaman dimuat
+window.onload = loadProvinsi;
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript
