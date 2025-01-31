@@ -18399,50 +18399,73 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
-async function cekJangkauan() {
-  let inputArea = document.getElementById("areaInput").value.trim().toLowerCase();
-  let resultElement = document.getElementById("result");
+let daftarKota = [];
 
-  if (inputArea === "") {
-      resultElement.innerHTML = "Silakan masukkan nama kota/kabupaten!";
-      resultElement.style.color = "red";
-      return;
-  }
-
-  // Daftar kota/kabupaten yang selalu tersedia
-  let kotaTersedia = [
-      "bekasi", "jakarta", "bogor", "depok", "tangerang", "bali", 
-      "badung", "denpasar", "gianyar", "tabanan", "bangli", "klungkung",
-      "karangasem", "jembrana", "buleleng"
-  ];
-
-  // Jika kota ada di daftar prioritas, langsung tampilkan "tersedia"
-  if (kotaTersedia.includes(inputArea)) {
-      resultElement.innerHTML = `✅ Layanan tersedia di ${inputArea.charAt(0).toUpperCase() + inputArea.slice(1)}.`;
-      resultElement.style.color = "green";
-      return;
-  }
-
-  try {
-      // Ambil daftar semua kota/kabupaten dari API
-      let response = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/regencies.json");
-      let data = await response.json();
-      
-      let daftarKota = data.map(item => item.name.toLowerCase());
-
-      if (daftarKota.includes(inputArea)) {
-          resultElement.innerHTML = `✅ Layanan tersedia di ${inputArea.charAt(0).toUpperCase() + inputArea.slice(1)}.`;
-          resultElement.style.color = "green";
-      } else {
-          resultElement.innerHTML = `❌ Maaf, layanan belum tersedia di ${inputArea.charAt(0).toUpperCase() + inputArea.slice(1)}.`;
-          resultElement.style.color = "red";
-      }
-  } catch (error) {
-      resultElement.innerHTML = "⚠️ Gagal mengambil data. Coba lagi nanti!";
-      resultElement.style.color = "orange";
-      console.error("Error fetching data:", error);
-  }
+// Ambil daftar kota/kabupaten dari API saat halaman dimuat
+async function loadKota() {
+    try {
+        let response = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/regencies.json");
+        daftarKota = await response.json();
+    } catch (error) {
+        console.error("Gagal memuat daftar kota:", error);
+    }
 }
+
+// Fungsi untuk menampilkan daftar kota yang cocok dengan input pengguna
+function cariKota() {
+    let input = document.getElementById("areaInput").value.toLowerCase();
+    let autocompleteList = document.getElementById("autocomplete-list");
+    autocompleteList.innerHTML = ""; // Hapus daftar sebelumnya
+
+    if (input.length === 0) return;
+
+    let filteredKota = daftarKota.filter(item => item.name.toLowerCase().includes(input));
+
+    filteredKota.forEach(item => {
+        let div = document.createElement("div");
+        div.innerHTML = `<strong>${item.name}</strong>, ${item.province_id}`;
+        div.onclick = function () {
+            document.getElementById("areaInput").value = item.name;
+            autocompleteList.innerHTML = "";
+        };
+        autocompleteList.appendChild(div);
+    });
+}
+
+// Fungsi untuk mengecek apakah layanan tersedia
+function cekJangkauan() {
+    let inputArea = document.getElementById("areaInput").value.trim().toLowerCase();
+    let resultElement = document.getElementById("result");
+
+    if (inputArea === "") {
+        resultElement.innerHTML = "Silakan pilih kota/kabupaten!";
+        resultElement.style.color = "red";
+        return;
+    }
+
+    // Daftar wilayah yang selalu tersedia
+    let kotaTersedia = ["bekasi", "jakarta", "bogor", "depok", "tangerang", "bali"];
+
+    // Menghapus kata tambahan seperti "Utara", "Selatan", "Timur", dll.
+    let kataTambahan = ["timur", "selatan", "utara", "barat", "pusat"];
+    let cleanInput = inputArea.split(" ").filter(word => !kataTambahan.includes(word)).join(" ");
+
+    if (kotaTersedia.includes(cleanInput)) {
+        resultElement.innerHTML = `✅ Layanan tersedia di ${capitalizeEachWord(inputArea)}.`;
+        resultElement.style.color = "green";
+    } else {
+        resultElement.innerHTML = `❌ Maaf, layanan belum tersedia di ${capitalizeEachWord(inputArea)}.`;
+        resultElement.style.color = "red";
+    }
+}
+
+// Fungsi untuk format kapital di setiap kata
+function capitalizeEachWord(str) {
+    return str.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
+
+// Load daftar kota saat halaman dimuat
+window.onload = loadKota;
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript

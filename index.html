@@ -739,12 +739,16 @@
       </div>
     </section>
     <div class="container">
-      <h2>Cek Jangkauan Area</h2>
-      <p>Masukkan kota/kabupaten untuk mengecek apakah layanan tersedia.</p>
-      <input type="text" id="areaInput" placeholder="Masukkan kota/kabupaten...">
-      <button class="submit-button w-button" onclick="cekJangkauan()">Cek</button>
+      <h2>Pastikan lokasi hunianmu berada dalam jangkauan kami</h2>
+      
+      <div class="autocomplete">
+          <input type="text" id="areaInput" placeholder="Masukkan kota/kabupaten..." onkeyup="cariKota()">
+          <div id="autocomplete-list" class="autocomplete-items"></div>
+      </div>
+
+      <button onclick="cekJangkauan()">Konsultasi di Kotamu</button>
       <p id="result"></p>
-    </div>
+  </div>
     <section class="footer-light">
       <div class="container-4">
         <div class="footer-wrapper-two">
