@@ -738,17 +738,19 @@
         </div>
       </div>
     </section>
-    <div class="container">
-      <h2>Pastikan lokasi hunianmu berada dalam jangkauan kami</h2>
+    <div class="containerr">
+      <h2 class="title">Pastikan lokasi hunianmu berada dalam jangkauan kami</h2>
       
-      <div class="autocomplete">
-          <input type="text" id="areaInput" placeholder="Masukkan kota/kabupaten..." onkeyup="cariKota()">
-          <div id="autocomplete-list" class="autocomplete-items"></div>
+      <div class="input-group">
+          <div class="input-wrapper">
+              <input type="text" id="areaInput" class="input-box" placeholder="Masukkan kota/kabupaten..." onkeyup="cariKota()">
+              <div id="autocomplete-list" class="autocomplete-items"></div>
+          </div>
+          <button class="btn-check" onclick="cekJangkauan()">Konsultasi di Kotamu</button>
       </div>
 
-      <button onclick="cekJangkauan()">Konsultasi di Kotamu</button>
-      <p id="result"></p>
-  </div>
+      <p id="result" class="result-message"></p>
+    </div>
     <section class="footer-light">
       <div class="container-4">
         <div class="footer-wrapper-two">
