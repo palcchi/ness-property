@@ -8048,3 +8048,25 @@ figcaption {
   font-style: normal;
   font-display: swap;
 }
+
+#searchBox {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+#resultList {
+    list-style-type: none;
+    padding: 0;
+}
+.resultItem {
+    padding: 8px;
+    background-color: #f1f1f1;
+    margin: 5px;
+    cursor: pointer;
+}
+.consultation {
+    display: none;
+    margin-top: 10px;
+    color: red;
+    font-weight: bold;
+}
