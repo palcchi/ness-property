@@ -8048,42 +8048,78 @@ figcaption {
   font-style: normal;
   font-display: swap;
 }
+/* Container Input Pencarian */
+#searchContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 
+/* Input Pencarian */
 #searchBox {
-    width: 300px;
-    padding: 10px;
-    margin-bottom: 10px;
+  width: 300px;
+  padding: 12px 16px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
+
+#searchBox:focus {
+  border-color: #2659eb;
+}
+
+/* Daftar Rekomendasi Kota */
 #resultList {
-    list-style-type: none;
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    display: none;
-    position: absolute;
-    background: white;
-    width: 310px;
-    text-align: left;
-    left: 50%;
-    transform: translateX(-50%);
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+  display: none;
 }
+
+/* Item Rekomendasi */
 .resultItem {
-    padding: 8px;
-    cursor: pointer;
-    border-bottom: 1px solid #ddd;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: #344054;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
+
 .resultItem:hover {
-    background-color: #f1f1f1;
+  background-color: #f2f4f7;
 }
+
+/* Pesan Jika Kota Tidak Tersedia */
 .consultation {
-    display: none;
-    margin-top: 10px;
-    color: red;
-    font-weight: bold;
+  display: none;
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
 }
+
+/* Informasi Kota yang Dipilih */
 #selectedCity {
-    margin-top: 20px;
-    font-weight: bold;
-    color: green;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.available {
+  color: green;
+}
+
+.not-available {
+  color: red;
 }
