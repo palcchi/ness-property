@@ -18400,6 +18400,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 let availableCities = [];
+const availableServices = ["Jakarta", "Bekasi", "Bandung", "Surabaya", "Semarang"]; // Kota dengan layanan tersedia
 
 // Fungsi untuk mengambil daftar kota dari API
 async function fetchCities() {
@@ -18412,7 +18413,7 @@ async function fetchCities() {
     }
 }
 
-// Fungsi pencarian kota
+// Fungsi pencarian kota dengan auto-suggest
 function searchCity() {
     const input = document.getElementById("searchBox").value.toLowerCase();
     const resultList = document.getElementById("resultList");
@@ -18422,18 +18423,38 @@ function searchCity() {
     let found = false;
 
     if (input.length > 0) {
-        availableCities.forEach(city => {
-            if (city.nama.toLowerCase().includes(input)) {
+        const filteredCities = availableCities.filter(city => city.nama.toLowerCase().includes(input));
+        
+        if (filteredCities.length > 0) {
+            resultList.style.display = "block";
+            filteredCities.forEach(city => {
                 const li = document.createElement("li");
                 li.textContent = city.nama;
                 li.classList.add("resultItem");
+                li.onclick = () => selectCity(city.nama);
                 resultList.appendChild(li);
-                found = true;
-            }
-        });
+            });
+            found = true;
+        }
     }
 
     consultationMessage.style.display = found ? "none" : "block";
+}
+
+// Fungsi memilih kota dari daftar
+function selectCity(cityName) {
+    document.getElementById("searchBox").value = cityName;
+    document.getElementById("resultList").style.display = "none";
+
+    // Menampilkan kota yang dipilih dan ketersediaan layanan
+    const selectedCity = document.getElementById("selectedCity");
+    if (availableServices.includes(cityName)) {
+        selectedCity.innerHTML = `Layanan tersedia di <strong>${cityName}</strong>`;
+        selectedCity.style.color = "green";
+    } else {
+        selectedCity.innerHTML = `Layanan <strong>belum tersedia</strong> di <strong>${cityName}</strong>`;
+        selectedCity.style.color = "red";
+    }
 }
 
 // Panggil API saat halaman dimuat
