@@ -8048,3 +8048,43 @@ figcaption {
   font-style: normal;
   font-display: swap;
 }
+#searchContainer {
+    position: relative;
+    display: inline-block;
+}
+#searchBox {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+#resultList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    text-align: left;
+    z-index: 1000;
+}
+.resultItem {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+.resultItem:hover {
+    background-color: #f1f1f1;
+}
+.consultation {
+    display: none;
+    margin-top: 10px;
+    color: red;
+}
+#selectedCity {
+    margin-top: 20px;
+    color: green;
+}
