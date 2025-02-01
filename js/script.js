@@ -18399,15 +18399,21 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
-let availableCities = [];
-const availableServices = ["Jakarta", "Bekasi", "Bandung", "Surabaya", "Semarang"]; // Kota dengan layanan tersedia
+let citiesList = [];
+const availableServices = ["Jakarta Pusat", "Bekasi", "Bandung", "Surabaya", "Semarang"]; // Kota dengan layanan tersedia
 
-// Fungsi untuk mengambil daftar kota dari API
-async function fetchCities() {
+// Fungsi untuk mengambil daftar kota dari file JSON
+async function loadCities() {
     try {
-        const response = await fetch("https://ibnux.github.io/data-indonesia/kota.json");
-        availableCities = await response.json();
-        console.log("Daftar kota berhasil dimuat!", availableCities);
+        const response = await fetch("data.json"); // Mengambil data dari file JSON lokal
+        const data = await response.json();
+        
+        // Mengumpulkan semua kota dari provinsi
+        data.provinsi.forEach(prov => {
+            citiesList = citiesList.concat(prov.kota);
+        });
+
+        console.log("Daftar kota berhasil dimuat!", citiesList);
     } catch (error) {
         console.error("Gagal memuat daftar kota:", error);
     }
@@ -18420,18 +18426,19 @@ function searchCity() {
     const consultationMessage = document.getElementById("consultationMessage");
 
     resultList.innerHTML = "";
+    resultList.style.display = "none"; // Sembunyikan daftar sebelum memeriksa hasil
     let found = false;
 
     if (input.length > 0) {
-        const filteredCities = availableCities.filter(city => city.nama.toLowerCase().includes(input));
-        
+        const filteredCities = citiesList.filter(city => city.toLowerCase().includes(input));
+
         if (filteredCities.length > 0) {
             resultList.style.display = "block";
             filteredCities.forEach(city => {
                 const li = document.createElement("li");
-                li.textContent = city.nama;
+                li.textContent = city;
                 li.classList.add("resultItem");
-                li.onclick = () => selectCity(city.nama);
+                li.onclick = () => selectCity(city);
                 resultList.appendChild(li);
             });
             found = true;
@@ -18457,8 +18464,18 @@ function selectCity(cityName) {
     }
 }
 
-// Panggil API saat halaman dimuat
-fetchCities();
+// Event listener untuk menutup daftar jika pengguna mengklik di luar area pencarian
+document.addEventListener("click", function(event) {
+    const searchContainer = document.getElementById("searchContainer");
+    if (!searchContainer.contains(event.target)) {
+        document.getElementById("resultList").style.display = "none";
+    }
+});
+
+// Memuat daftar kota saat halaman pertama kali dibuka
+loadCities().then(() => {
+    document.getElementById("searchBox").addEventListener("input", searchCity);
+});
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript

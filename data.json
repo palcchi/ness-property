@@ -1,0 +1,20 @@
+{
+    "provinsi": [
+        {
+            "nama": "Jawa Barat",
+            "kota": ["Bandung", "Bekasi", "Bogor", "Depok", "Cirebon", "Sukabumi"]
+        },
+        {
+            "nama": "Jawa Tengah",
+            "kota": ["Semarang", "Solo", "Tegal", "Magelang"]
+        },
+        {
+            "nama": "Jawa Timur",
+            "kota": ["Surabaya", "Malang", "Kediri", "Madiun", "Pasuruan"]
+        },
+        {
+            "nama": "DKI Jakarta",
+            "kota": ["Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara"]
+        }
+    ]
+}
