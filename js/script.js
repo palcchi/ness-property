@@ -18399,93 +18399,45 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
-let daftarKota = [];
-let daftarProvinsi = [];
+let availableCities = [];
 
-// Fungsi untuk memuat daftar provinsi
-async function loadProvinsi() {
+// Fungsi untuk mengambil daftar kota dari API
+async function fetchCities() {
     try {
-        let response = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json");
-        daftarProvinsi = await response.json();
-        loadSemuaKota(); // Setelah provinsi dimuat, ambil daftar kota
-    } catch (error) {
-        console.error("Gagal memuat daftar provinsi:", error);
-    }
-}
-
-// Fungsi untuk mengambil daftar semua kota di Indonesia
-async function loadSemuaKota() {
-    try {
-        let semuaKota = [];
-        
-        for (let provinsi of daftarProvinsi) {
-            let response = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinsi.id}.json`);
-            let kotaDariProvinsi = await response.json();
-            semuaKota = semuaKota.concat(kotaDariProvinsi);
-        }
-
-        daftarKota = semuaKota;
-        console.log("Daftar kota berhasil dimuat:", daftarKota);
+        const response = await fetch("https://ibnux.github.io/data-indonesia/kota.json");
+        availableCities = await response.json();
+        console.log("Daftar kota berhasil dimuat!", availableCities);
     } catch (error) {
         console.error("Gagal memuat daftar kota:", error);
     }
 }
 
-// Fungsi untuk menampilkan daftar kota yang cocok dengan input pengguna
-function cariKota() {
-    let input = document.getElementById("areaInput").value.toLowerCase();
-    let autocompleteList = document.getElementById("autocomplete-list");
-    autocompleteList.innerHTML = ""; // Hapus daftar sebelumnya
+// Fungsi pencarian kota
+function searchCity() {
+    const input = document.getElementById("searchBox").value.toLowerCase();
+    const resultList = document.getElementById("resultList");
+    const consultationMessage = document.getElementById("consultationMessage");
 
-    if (input.length === 0) return;
+    resultList.innerHTML = "";
+    let found = false;
 
-    let filteredKota = daftarKota.filter(item => item.name.toLowerCase().includes(input));
-
-    filteredKota.forEach(item => {
-        let div = document.createElement("div");
-        div.innerHTML = `<strong>${item.name}</strong>`;
-        div.onclick = function () {
-            document.getElementById("areaInput").value = item.name;
-            autocompleteList.innerHTML = "";
-        };
-        autocompleteList.appendChild(div);
-    });
-}
-
-// Fungsi untuk mengecek apakah layanan tersedia
-function cekJangkauan() {
-    let inputArea = document.getElementById("areaInput").value.trim().toLowerCase();
-    let resultElement = document.getElementById("result");
-
-    if (inputArea === "") {
-        resultElement.innerHTML = "Silakan pilih kota/kabupaten!";
-        resultElement.style.color = "red";
-        return;
+    if (input.length > 0) {
+        availableCities.forEach(city => {
+            if (city.nama.toLowerCase().includes(input)) {
+                const li = document.createElement("li");
+                li.textContent = city.nama;
+                li.classList.add("resultItem");
+                resultList.appendChild(li);
+                found = true;
+            }
+        });
     }
 
-    // Daftar wilayah yang selalu tersedia
-    let kotaTersedia = ["bekasi", "jakarta", "bogor", "depok", "tangerang", "bali"];
-
-    // Menghapus kata tambahan seperti "Utara", "Selatan", "Timur", dll.
-    let kataTambahan = ["timur", "selatan", "utara", "barat", "pusat"];
-    let cleanInput = inputArea.split(" ").filter(word => !kataTambahan.includes(word)).join(" ");
-
-    if (kotaTersedia.includes(cleanInput)) {
-        resultElement.innerHTML = `✅ Layanan tersedia di ${capitalizeEachWord(inputArea)}.`;
-        resultElement.style.color = "green";
-    } else {
-        resultElement.innerHTML = `❌ Maaf, layanan belum tersedia di ${capitalizeEachWord(inputArea)}.`;
-        resultElement.style.color = "red";
-    }
+    consultationMessage.style.display = found ? "none" : "block";
 }
 
-// Fungsi untuk format kapital di setiap kata
-function capitalizeEachWord(str) {
-    return str.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-}
-
-// Load daftar provinsi saat halaman dimuat
-window.onload = loadProvinsi;
+// Panggil API saat halaman dimuat
+fetchCities();
 /*!
  * tram.js v0.8.2-global
  * Cross-browser CSS3 transitions in JavaScript
