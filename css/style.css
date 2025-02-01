@@ -8057,16 +8057,33 @@ figcaption {
 #resultList {
     list-style-type: none;
     padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    display: none;
+    position: absolute;
+    background: white;
+    width: 310px;
+    text-align: left;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .resultItem {
     padding: 8px;
-    background-color: #f1f1f1;
-    margin: 5px;
     cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+.resultItem:hover {
+    background-color: #f1f1f1;
 }
 .consultation {
     display: none;
     margin-top: 10px;
     color: red;
     font-weight: bold;
+}
+#selectedCity {
+    margin-top: 20px;
+    font-weight: bold;
+    color: green;
 }
