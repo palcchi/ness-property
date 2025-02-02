@@ -18400,7 +18400,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 let citiesList = [];
-const projectCoverage = ["Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara", "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Bali"];
+const projectCoverage = [
+    "Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara", 
+    "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Bali",
+    "Jawa Barat", "DKI Jakarta", "Bali" // Tambahkan provinsi dalam jangkauan proyek
+];
 
 // Mengambil daftar provinsi dari API
 async function fetchProvinces() {
@@ -18408,12 +18412,17 @@ async function fetchProvinces() {
         const response = await fetch("https://ibnux.github.io/data-indonesia/provinsi.json");
         const provinces = await response.json();
 
+        // Simpan provinsi untuk pencarian
+        provinces.forEach(prov => {
+            citiesList.push({ name: prov.nama, type: "provinsi", id: prov.id });
+        });
+
         // Ambil daftar kota berdasarkan provinsi
         for (const province of provinces) {
             await fetchCities(province.id, province.nama);
         }
 
-        console.log("Daftar kota berhasil dimuat!", citiesList);
+        console.log("Daftar kota & provinsi berhasil dimuat!", citiesList);
     } catch (error) {
         console.error("Gagal memuat daftar provinsi:", error);
     }
@@ -18427,7 +18436,7 @@ async function fetchCities(provinceId, provinceName) {
 
         // Gabungkan Provinsi dan Kota/Kabupaten dalam format "Provinsi, Kota"
         cities.forEach(city => {
-            citiesList.push({ name: `${provinceName}, ${city.nama}`, cityOnly: city.nama });
+            citiesList.push({ name: `${provinceName}, ${city.nama}`, type: "kota", cityOnly: city.nama, provinceOnly: provinceName });
         });
 
     } catch (error) {
@@ -18464,14 +18473,23 @@ function searchCity() {
     consultationButton.style.display = found ? "none" : "block";
 }
 
-// Fungsi memilih kota dari daftar
+// Fungsi memilih kota/provinsi dari daftar
 function selectCity(city) {
     document.getElementById("searchBox").value = city.name;
     document.getElementById("resultList").style.display = "none";
 
     // Menampilkan status jangkauan proyek
     const selectedCity = document.getElementById("selectedCity");
-    if (projectCoverage.includes(city.cityOnly)) {
+    let isInProject = false;
+
+    // Cek apakah provinsi atau kota masuk dalam jangkauan proyek
+    if (city.type === "provinsi" && projectCoverage.includes(city.name)) {
+        isInProject = true;
+    } else if (city.type === "kota" && (projectCoverage.includes(city.cityOnly) || projectCoverage.includes(city.provinceOnly))) {
+        isInProject = true;
+    }
+
+    if (isInProject) {
         selectedCity.innerHTML = `<strong>${city.name}</strong> dalam jangkauan proyek kami. ✅`;
         selectedCity.style.color = "green";
     } else {
