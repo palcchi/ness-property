@@ -18400,38 +18400,25 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 let citiesList = [];
-const projectCoverage = ["Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara", "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Bali"];
+const projectCoverage = [
+    "Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara",
+    "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Denpasar"
+];
 
-// Mengambil daftar provinsi dari API
-async function fetchProvinces() {
+// Mengambil daftar kota dari API
+async function fetchCities() {
     try {
-        const response = await fetch("https://ibnux.github.io/data-indonesia/provinsi.json");
-        const provinces = await response.json();
+        const response = await fetch("https://ibnux.github.io/data-indonesia/kota.json");
+        const cities = await response.json();
 
-        // Ambil daftar kota berdasarkan provinsi
-        for (const province of provinces) {
-            await fetchCities(province.id, province.nama);
-        }
+        // Simpan hanya nama kota
+        cities.forEach(city => {
+            citiesList.push(city.nama);
+        });
 
         console.log("Daftar kota berhasil dimuat!", citiesList);
     } catch (error) {
-        console.error("Gagal memuat daftar provinsi:", error);
-    }
-}
-
-// Mengambil daftar kota berdasarkan ID provinsi
-async function fetchCities(provinceId, provinceName) {
-    try {
-        const response = await fetch(`https://ibnux.github.io/data-indonesia/kota/${provinceId}.json`);
-        const cities = await response.json();
-
-        // Gabungkan Provinsi dan Kota/Kabupaten dalam format "Provinsi, Kota"
-        cities.forEach(city => {
-            citiesList.push({ name: `${provinceName}, ${city.nama}`, cityOnly: city.nama });
-        });
-
-    } catch (error) {
-        console.error(`Gagal memuat kota untuk provinsi ${provinceName}:`, error);
+        console.error("Gagal memuat daftar kota:", error);
     }
 }
 
@@ -18446,13 +18433,13 @@ function searchCity() {
     let found = false;
 
     if (input.length > 0) {
-        const filteredCities = citiesList.filter(city => city.name.toLowerCase().includes(input));
+        const filteredCities = citiesList.filter(city => city.toLowerCase().includes(input));
 
         if (filteredCities.length > 0) {
             resultList.style.display = "block";
             filteredCities.forEach(city => {
                 const li = document.createElement("li");
-                li.textContent = city.name;
+                li.textContent = city;
                 li.classList.add("resultItem");
                 li.onclick = () => selectCity(city);
                 resultList.appendChild(li);
@@ -18466,16 +18453,16 @@ function searchCity() {
 
 // Fungsi memilih kota dari daftar
 function selectCity(city) {
-    document.getElementById("searchBox").value = city.name;
+    document.getElementById("searchBox").value = city;
     document.getElementById("resultList").style.display = "none";
 
     // Menampilkan status jangkauan proyek
     const selectedCity = document.getElementById("selectedCity");
-    if (projectCoverage.includes(city.cityOnly)) {
-        selectedCity.innerHTML = `<strong>${city.name}</strong> dalam jangkauan proyek kami. ✅`;
+    if (projectCoverage.includes(city)) {
+        selectedCity.innerHTML = `<strong>${city}</strong> dalam jangkauan proyek kami. ✅`;
         selectedCity.style.color = "green";
     } else {
-        selectedCity.innerHTML = `<strong>${city.name}</strong> tidak dalam jangkauan proyek kami. ❌`;
+        selectedCity.innerHTML = `<strong>${city}</strong> tidak dalam jangkauan proyek kami. ❌`;
         selectedCity.style.color = "red";
     }
 }
@@ -18488,7 +18475,7 @@ document.addEventListener("click", function(event) {
     }
 });
 
-// Memuat daftar provinsi dan kota saat halaman pertama kali dibuka
-fetchProvinces().then(() => {
+// Memuat daftar kota saat halaman pertama kali dibuka
+fetchCities().then(() => {
     document.getElementById("searchBox").addEventListener("input", searchCity);
 });
