@@ -18402,22 +18402,36 @@ document.addEventListener('DOMContentLoaded', function () {
 let citiesList = [];
 const projectCoverage = ["Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara", "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Bali"];
 
-// Mengambil data dari file JSON
-async function loadCities() {
+// Mengambil daftar provinsi dari API
+async function fetchProvinces() {
     try {
-        const response = await fetch("data.json"); // Mengambil data dari file JSON lokal
-        const data = await response.json();
-        
-        // Gabungkan Provinsi dan Kota/Kabupaten dalam format "Provinsi, Kota"
-        data.provinsi.forEach(prov => {
-            prov.kota.forEach(kota => {
-                citiesList.push({ name: `${prov.nama}, ${kota}`, cityOnly: kota });
-            });
-        });
+        const response = await fetch("https://ibnux.github.io/data-indonesia/provinsi.json");
+        const provinces = await response.json();
+
+        // Ambil daftar kota berdasarkan provinsi
+        for (const province of provinces) {
+            await fetchCities(province.id, province.nama);
+        }
 
         console.log("Daftar kota berhasil dimuat!", citiesList);
     } catch (error) {
-        console.error("Gagal memuat daftar kota:", error);
+        console.error("Gagal memuat daftar provinsi:", error);
+    }
+}
+
+// Mengambil daftar kota berdasarkan ID provinsi
+async function fetchCities(provinceId, provinceName) {
+    try {
+        const response = await fetch(`https://ibnux.github.io/data-indonesia/kota/${provinceId}.json`);
+        const cities = await response.json();
+
+        // Gabungkan Provinsi dan Kota/Kabupaten dalam format "Provinsi, Kota"
+        cities.forEach(city => {
+            citiesList.push({ name: `${provinceName}, ${city.nama}`, cityOnly: city.nama });
+        });
+
+    } catch (error) {
+        console.error(`Gagal memuat kota untuk provinsi ${provinceName}:`, error);
     }
 }
 
@@ -18474,33 +18488,7 @@ document.addEventListener("click", function(event) {
     }
 });
 
-// Memuat daftar kota saat halaman pertama kali dibuka
-loadCities().then(() => {
+// Memuat daftar provinsi dan kota saat halaman pertama kali dibuka
+fetchProvinces().then(() => {
     document.getElementById("searchBox").addEventListener("input", searchCity);
 });
-/*!
- * tram.js v0.8.2-global
- * Cross-browser CSS3 transitions in JavaScript
- * https://github.com/bkwld/tram
- * MIT License
- */
-/*!
- * Webflow._ (aka) Underscore.js 1.6.0 (custom build)
- *
- * http://underscorejs.org
- * (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Underscore may be freely distributed under the MIT license.
- * @license MIT
- */
-/*! Bundled license information:
-
-timm/lib/timm.js:
-  (*!
-   * Timm
-   *
-   * Immutability helpers with fast reads and acceptable writes.
-   *
-   * @copyright Guillermo Grau Panea 2016
-   * @license MIT
-   *)
-*/
