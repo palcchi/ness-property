@@ -18400,17 +18400,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 let citiesList = [];
-const availableServices = ["Jakarta Pusat", "Bekasi", "Bandung", "Surabaya", "Semarang"]; // Kota dengan layanan tersedia
+const projectCoverage = ["Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara", "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Bali"];
 
-// Fungsi untuk mengambil daftar kota dari file JSON
+// Mengambil data dari file JSON
 async function loadCities() {
     try {
         const response = await fetch("data.json"); // Mengambil data dari file JSON lokal
         const data = await response.json();
         
-        // Mengumpulkan semua kota dari provinsi
+        // Gabungkan Provinsi dan Kota/Kabupaten dalam format "Provinsi, Kota"
         data.provinsi.forEach(prov => {
-            citiesList = citiesList.concat(prov.kota);
+            prov.kota.forEach(kota => {
+                citiesList.push({ name: `${prov.nama}, ${kota}`, cityOnly: kota });
+            });
         });
 
         console.log("Daftar kota berhasil dimuat!", citiesList);
@@ -18423,20 +18425,20 @@ async function loadCities() {
 function searchCity() {
     const input = document.getElementById("searchBox").value.toLowerCase();
     const resultList = document.getElementById("resultList");
-    const consultationMessage = document.getElementById("consultationMessage");
+    const consultationButton = document.getElementById("consultationButton");
 
     resultList.innerHTML = "";
     resultList.style.display = "none"; // Sembunyikan daftar sebelum memeriksa hasil
     let found = false;
 
     if (input.length > 0) {
-        const filteredCities = citiesList.filter(city => city.toLowerCase().includes(input));
+        const filteredCities = citiesList.filter(city => city.name.toLowerCase().includes(input));
 
         if (filteredCities.length > 0) {
             resultList.style.display = "block";
             filteredCities.forEach(city => {
                 const li = document.createElement("li");
-                li.textContent = city;
+                li.textContent = city.name;
                 li.classList.add("resultItem");
                 li.onclick = () => selectCity(city);
                 resultList.appendChild(li);
@@ -18445,21 +18447,21 @@ function searchCity() {
         }
     }
 
-    consultationMessage.style.display = found ? "none" : "block";
+    consultationButton.style.display = found ? "none" : "block";
 }
 
 // Fungsi memilih kota dari daftar
-function selectCity(cityName) {
-    document.getElementById("searchBox").value = cityName;
+function selectCity(city) {
+    document.getElementById("searchBox").value = city.name;
     document.getElementById("resultList").style.display = "none";
 
-    // Menampilkan kota yang dipilih dan ketersediaan layanan
+    // Menampilkan status jangkauan proyek
     const selectedCity = document.getElementById("selectedCity");
-    if (availableServices.includes(cityName)) {
-        selectedCity.innerHTML = `Layanan tersedia di <strong>${cityName}</strong>`;
+    if (projectCoverage.includes(city.cityOnly)) {
+        selectedCity.innerHTML = `<strong>${city.name}</strong> dalam jangkauan proyek kami. ✅`;
         selectedCity.style.color = "green";
     } else {
-        selectedCity.innerHTML = `Layanan <strong>belum tersedia</strong> di <strong>${cityName}</strong>`;
+        selectedCity.innerHTML = `<strong>${city.name}</strong> tidak dalam jangkauan proyek kami. ❌`;
         selectedCity.style.color = "red";
     }
 }

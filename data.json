@@ -1,20 +1,91 @@
 {
     "provinsi": [
         {
+            "id": "1",
+            "nama": "Aceh",
+            "kota": [
+                "Aceh Barat",
+                "Aceh Besar",
+                "Banda Aceh",
+                "Lhokseumawe",
+                "Sabang"
+            ]
+        },
+        {
+            "id": "2",
+            "nama": "Sumatera Utara",
+            "kota": [
+                "Medan",
+                "Binjai",
+                "Tebing Tinggi",
+                "Pematang Siantar",
+                "Sibolga"
+            ]
+        },
+        {
+            "id": "3",
+            "nama": "Sumatera Barat",
+            "kota": [
+                "Padang",
+                "Bukittinggi",
+                "Payakumbuh",
+                "Sawahlunto",
+                "Solok"
+            ]
+        },
+        {
+            "id": "4",
+            "nama": "Riau",
+            "kota": [
+                "Pekanbaru",
+                "Dumai"
+            ]
+        },
+        {
+            "id": "5",
             "nama": "Jawa Barat",
-            "kota": ["Bandung", "Bekasi", "Bogor", "Depok", "Cirebon", "Sukabumi"]
+            "kota": [
+                "Bandung",
+                "Bekasi",
+                "Bogor",
+                "Depok",
+                "Cimahi",
+                "Sukabumi"
+            ]
         },
         {
+            "id": "6",
             "nama": "Jawa Tengah",
-            "kota": ["Semarang", "Solo", "Tegal", "Magelang"]
+            "kota": [
+                "Semarang",
+                "Surakarta",
+                "Magelang",
+                "Pekalongan",
+                "Tegal"
+            ]
         },
         {
+            "id": "7",
             "nama": "Jawa Timur",
-            "kota": ["Surabaya", "Malang", "Kediri", "Madiun", "Pasuruan"]
+            "kota": [
+                "Surabaya",
+                "Malang",
+                "Kediri",
+                "Madiun",
+                "Pasuruan",
+                "Blitar"
+            ]
         },
         {
+            "id": "8",
             "nama": "DKI Jakarta",
-            "kota": ["Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara"]
+            "kota": [
+                "Jakarta Pusat",
+                "Jakarta Barat",
+                "Jakarta Selatan",
+                "Jakarta Timur",
+                "Jakarta Utara"
+            ]
         }
     ]
 }
