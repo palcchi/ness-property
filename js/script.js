@@ -18400,27 +18400,38 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 let citiesList = [];
-const projectCoverage = [
-    "Bekasi, Jawa Barat", "Jakarta Pusat, DKI Jakarta", "Jakarta Barat, DKI Jakarta", 
-    "Jakarta Selatan, DKI Jakarta", "Jakarta Timur, DKI Jakarta", "Jakarta Utara, DKI Jakarta", 
-    "Depok, Jawa Barat", "Bogor, Jawa Barat", "Tangerang, Banten", "Tangerang Selatan, Banten", 
-    "Denpasar, Bali"
-];
+const projectCoverage = ["Bekasi", "Jakarta Pusat", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Utara", "Depok", "Bogor", "Tangerang", "Tangerang Selatan", "Bali"];
 
-// Mengambil daftar kota dari API
-async function fetchCities() {
+// Mengambil daftar provinsi dari API
+async function fetchProvinces() {
     try {
-        const response = await fetch("https://ibnux.github.io/data-indonesia/kota.json");
-        const cities = await response.json();
+        const response = await fetch("https://ibnux.github.io/data-indonesia/provinsi.json");
+        const provinces = await response.json();
 
-        // Gabungkan nama kota dan provinsi dalam format "Nama Kota, Provinsi"
-        cities.forEach(city => {
-            citiesList.push(`${city.nama}, ${city.id_provinsi_nama}`);
-        });
+        // Ambil daftar kota berdasarkan provinsi
+        for (const province of provinces) {
+            await fetchCities(province.id, province.nama);
+        }
 
         console.log("Daftar kota berhasil dimuat!", citiesList);
     } catch (error) {
-        console.error("Gagal memuat daftar kota:", error);
+        console.error("Gagal memuat daftar provinsi:", error);
+    }
+}
+
+// Mengambil daftar kota berdasarkan ID provinsi
+async function fetchCities(provinceId, provinceName) {
+    try {
+        const response = await fetch(`https://ibnux.github.io/data-indonesia/kota/${provinceId}.json`);
+        const cities = await response.json();
+
+        // Gabungkan Provinsi dan Kota/Kabupaten dalam format "Provinsi, Kota"
+        cities.forEach(city => {
+            citiesList.push({ name: `${provinceName}, ${city.nama}`, cityOnly: city.nama });
+        });
+
+    } catch (error) {
+        console.error(`Gagal memuat kota untuk provinsi ${provinceName}:`, error);
     }
 }
 
@@ -18435,13 +18446,13 @@ function searchCity() {
     let found = false;
 
     if (input.length > 0) {
-        const filteredCities = citiesList.filter(city => city.toLowerCase().includes(input));
+        const filteredCities = citiesList.filter(city => city.name.toLowerCase().includes(input));
 
         if (filteredCities.length > 0) {
             resultList.style.display = "block";
             filteredCities.forEach(city => {
                 const li = document.createElement("li");
-                li.textContent = city;
+                li.textContent = city.name;
                 li.classList.add("resultItem");
                 li.onclick = () => selectCity(city);
                 resultList.appendChild(li);
@@ -18455,16 +18466,16 @@ function searchCity() {
 
 // Fungsi memilih kota dari daftar
 function selectCity(city) {
-    document.getElementById("searchBox").value = city;
+    document.getElementById("searchBox").value = city.name;
     document.getElementById("resultList").style.display = "none";
 
     // Menampilkan status jangkauan proyek
     const selectedCity = document.getElementById("selectedCity");
-    if (projectCoverage.includes(city)) {
-        selectedCity.innerHTML = `<strong>${city}</strong> dalam jangkauan proyek kami. ✅`;
+    if (projectCoverage.includes(city.cityOnly)) {
+        selectedCity.innerHTML = `<strong>${city.name}</strong> dalam jangkauan proyek kami. ✅`;
         selectedCity.style.color = "green";
     } else {
-        selectedCity.innerHTML = `<strong>${city}</strong> tidak dalam jangkauan proyek kami. ❌`;
+        selectedCity.innerHTML = `<strong>${city.name}</strong> tidak dalam jangkauan proyek kami. ❌`;
         selectedCity.style.color = "red";
     }
 }
@@ -18477,7 +18488,7 @@ document.addEventListener("click", function(event) {
     }
 });
 
-// Memuat daftar kota saat halaman pertama kali dibuka
-fetchCities().then(() => {
+// Memuat daftar provinsi dan kota saat halaman pertama kali dibuka
+fetchProvinces().then(() => {
     document.getElementById("searchBox").addEventListener("input", searchCity);
 });
